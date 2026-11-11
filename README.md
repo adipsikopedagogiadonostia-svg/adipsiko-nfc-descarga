@@ -1,0 +1,1 @@
+# adipsiko-nfc-descarga
