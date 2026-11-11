@@ -1,0 +1,19 @@
+name: Publicar APK
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publicar en Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -f ADIPSIKO_NFC.apk.b64 ]; then echo "Sin APK"; exit 0; fi
+          base64 -d ADIPSIKO_NFC.apk.b64 > ADIPSIKO_NFC.apk
+          sha256sum ADIPSIKO_NFC.apk
+          gh release create "v${{ github.run_number }}" ADIPSIKO_NFC.apk --repo "${{ github.repository }}" --latest --title "ADIPSIKO NFC (${{ github.run_number }})" --notes "Descarga ADIPSIKO_NFC.apk e instálala en un móvil Android."
